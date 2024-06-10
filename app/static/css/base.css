@@ -1,0 +1,223 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+:root {
+  --transition-duration: 0.3s;
+  --transition-easing: ease-in-out;
+  --font-family: "Poppins", sans-serif;
+
+  /* Colors */
+  --color-black: black;
+  --color-white: #ffffff;
+  --color-gray-light: rgba(163, 163, 163, 0.3);
+  --color-gray: #888;
+  --color-gray-dark: #555;
+  --color-aliceblue: aliceblue;
+  --color-pink: pink;
+  --color-gray-text: rgb(84, 84, 84);
+  --color-gray-border: #ccc;
+  
+  --color-scrollbar-track: #f1f1f1;
+  --color-scrollbar-thumb: #888;
+  --color-scrollbar-thumb-hover: #555;
+  --color-dropdown-bg: rgba(230, 230, 230, 0.3);
+
+  /* Dimensions */
+  --sidebar-width: 250px;
+  --sidebar-padding: 1.5rem;
+  --sidebar-border-radius: 0.8rem;
+  --sidebar-gap: 1rem;
+
+  --scrollbar-width: 3px;
+  --icon-padding: 0.8rem;
+  --icon-size: 45px;
+  --division-margin: 1rem 0;
+  --division-font-size: 0.65rem;
+  --menu-margin: 0.5rem 0;
+
+  --dropdown-gap: 4rem;
+  --dropdown-min-width: 160px;
+  --content-gap: 0.5rem;
+  --content-padding: 0.5rem;
+
+  /* Shadows */
+  --sidebar-box-shadow: 0px 0px 5px 1.5px var(--color-gray-light);
+  --icon-box-shadow: 0px 0px 5px 2px var(--color-gray-light);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+  transition: all var(--transition-duration) var(--transition-easing);
+}
+
+
+
+a {
+  text-decoration: none;
+  color: var(--color-black);
+}
+
+#content{
+  width: 100%;
+}
+
+.body__wrap {
+  position: relative;
+  display: flex;
+  background-color: var(--color-aliceblue);
+  height: 100dvh;
+  padding: 1rem;
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100%;
+  width: 300px;
+  background-color: var(--color-white);
+  padding: var(--sidebar-padding);
+  border-radius: var(--sidebar-border-radius);
+  box-shadow: var(--sidebar-box-shadow);
+  transition: all var(--transition-duration) var(--transition-easing);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-scrollbar-track);
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar-thumb);
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scrollbar-thumb-hover);
+}
+
+.s__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: var(--sidebar-gap);
+}
+
+img {
+  width: 50px;
+  height: 50px;
+}
+
+.s__title p {
+  font-size: 1rem;
+  color: var(--color-gray-text);
+  vertical-align: middle;
+}
+
+.s__division {
+  font-size: var(--division-font-size);
+  color: var(--color-gray-text);
+  margin: var(--division-margin);
+  text-align: center;
+}
+
+.s__close {
+  display: block;
+}
+
+.s__menus {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.s__menus:last-child {
+  align-self: flex-end;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid var(--color-gray-border);
+  margin: var(--division-margin);
+}
+
+.m__btn {
+  border: none;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--sidebar-gap);
+  margin: var(--menu-margin);
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.m__icon {
+  padding: var(--icon-padding);
+  color: var(--color-black);
+  width: var(--icon-size);
+  border-radius: 0.5rem;
+  background-color: var(--icon-bg);
+  box-shadow: var(--icon-box-shadow);
+}
+
+
+.m__btn:hover > .m__icon, .m__icon:hover {
+  background-color: var(--color-pink);
+  color: var(--color-gray-dark);
+}
+
+.active .m__icon {
+  width: var(--icon-size);
+  background-color: var(--color-pink);
+  color: var(--color-gray-dark);
+}
+
+
+.dropdown__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--dropdown-gap);
+}
+
+.dropdown__content {
+  display: none;
+  background-color: var(--color-white);
+  min-width: var(--dropdown-min-width);
+  z-index: 1;
+}
+
+.content__wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-gap);
+  padding: var(--content-padding);
+}
+
+.content__wrap *{
+  border-bottom: 1px solid black;
+}
+.content__wrap *:hover{
+  color: var(--color-pink);
+}
+
+.content__wrap .active{
+  color: var(--color-pink);
+}
+
+
+i:hover {
+  cursor: pointer;
+}

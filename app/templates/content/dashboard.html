@@ -1,0 +1,84 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/tables.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components/dashboard.css') }}" />
+
+<div class="wrap">
+  <div class="header">
+    <form onsubmit="searchRow()">
+      <input type="text" id="search" placeholder="Search" class="f__input" />
+      <select name="category" class="f__select">
+        <option value="" disabled selected hidden>Search by</option>
+        <option value="Customer Name">Customer Name</option>
+        <option value="Book Title">Book Title</option>
+        <option value="Quantity">Quantity</option>
+        <option value="Book Price">Book Price</option>
+        <option value="">All</option>
+      </select>
+      <button onclick="searchRow()" class="f__btn">Search</button>
+    </form>
+    <div class="table__title">
+      <h1>CUSTOMERS PURCHASED HISTORY</h1>
+    </div>
+  </div>
+  <div class="table">
+    <table id="htmlTable">
+      <thead>
+        <tr>
+          <th>Customer Name</th>
+          <th>Book Title</th>
+          <th>Quantity</th>
+          <th>Book Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in table %}
+        <tr>
+          {% for cell in row %}
+          <td contenteditable="false" class="t__td">{% if cell is number %} {{ cell|round(2) }} {% else %} {{ cell }} {% endif %}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+
+function searchRow() {
+    event.preventDefault();
+
+    const searchQuery = document.getElementById("search").value.toLowerCase();
+    const category = document.querySelector(".f__select").value;
+
+    const rows = document.querySelectorAll("#htmlTable tbody tr");
+
+    rows.forEach((row) => {
+      let match = false;
+
+      if (!category || category === "All") {
+        row.querySelectorAll("td").forEach((cell) => {
+          if (cell.textContent.toLowerCase().includes(searchQuery)) {
+            match = true;
+          }
+        });
+      } else {
+        const cells = row.querySelectorAll("td");
+        const headers = document.querySelectorAll("#htmlTable thead th");
+        headers.forEach((header, index) => {
+          if (header.textContent === category) {
+            if (cells[index].textContent.toLowerCase().includes(searchQuery)) {
+              match = true;
+            }
+          }
+        });
+      }
+
+      // Show/Hide the row based on the match
+      if (match) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  }
+    
+</script>

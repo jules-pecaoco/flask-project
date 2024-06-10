@@ -1,0 +1,171 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- FONTAWESOME -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/solid.min.css"
+      integrity="sha512-Hp+WwK4QdKZk9/W0ViDvLunYjFrGJmNDt6sCflZNkjgvNq9mY+0tMbd6tWMiAlcf1OQyqL4gn2rYp7UsfssZPA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}" />
+
+    <!-- TO PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <title>{% block title %}Home{% endblock %}</title>
+
+    <!-- <title>Base</title> -->
+  </head>
+
+  <body>
+    <div class="body__wrap">
+      <nav class="sidebar">
+        <h2 class="s__title">
+          <img src="/static/images/dashboard.gif" alt="" />
+          <p class="s__close" style="text-align: center;">CanAmazing Dashboard</p>
+        </h2>
+        <hr class="s__division" />
+        <div class="s__menus">
+          <button class="m__btn load-content active" data-url="/home/dashboard">
+            <i class="m__icon fa-solid fa-shop fa-fw"></i>
+            <p class="m__text s__close">Dashboard</p>
+          </button>
+          <div>
+            <div class="dropdown__toggle">
+              <button class="m__btn load-content" data-url="/home/table/Author">
+                <i class="m__icon fa-solid fa-book-open-reader fa-fw"></i>
+                <p class="m__text s__close">Tables</p>
+              </button>
+              <i class="fa-solid fa-chevron-down s__close"></i>
+            </div>
+            <div class="dropdown__content">
+              <div class="content__wrap">
+                <button class="m__btn load-content" data-url="/home/table/Author">Author</button>
+                <button class="m__btn load-content" data-url="/home/table/Book Prizes">Book Prizes</button>
+                <button class="m__btn load-content" data-url="/home/table/Shipment">Shipment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="s__division">ACCOUNT PAGES</div>
+        <div class="s__menus">
+          <button class="m__btn load-content" data-url="/home/admin">
+            <i class="m__icon fa-solid fa-user-tie fa-fw"></i>
+            <p class="m__text s__close">Admin</p>
+          </button>
+          <a href="/home/logout" class="m__btn">
+            <i class="m__icon fa-solid fa-right-from-bracket fa-fw" style="rotate: 180deg;"></i>
+            <p class="m__text s__close">Log Out</p>
+          </a>
+        </div>
+        <hr class="s__division" />
+        <i class="fa-solid fa-circle-arrow-left close m__icon"></i>
+      </nav>
+
+      <div id="content">{% include 'content/dashboard.html' %}</div>
+    </div>
+  </body>
+
+  <script>
+    function loadContent(url) {
+      fetch(url)
+        .then((response) => response.text())
+        .then((html) => {
+          const contentElement = document.getElementById("content");
+          contentElement.innerHTML = html;
+          
+          const scripts = contentElement.querySelectorAll("script");
+          scripts.forEach((script) => {
+            const newScript = document.createElement("script");
+            newScript.textContent = script.textContent;
+            document.body.appendChild(newScript);
+            document.body.removeChild(newScript); 
+          });
+          history.pushState(null, "", url); // Update the URL
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".load-content").forEach((button) => {
+        button.addEventListener("click", function () {
+          const url = this.getAttribute("data-url");
+          loadContent(url);
+        });
+      });
+    });
+
+    const dropdown = document.querySelectorAll(".dropdown__toggle");
+    const dropdownContent = document.querySelectorAll(".dropdown__content");
+    const sidebar = document.querySelector(".sidebar");
+    const close = document.querySelector(".close");
+    const s__close = document.querySelectorAll(".s__close");
+    const s__menu = document.querySelector(".s__menus");
+    const chevrondown = document.querySelectorAll(".fa-chevron-down");
+
+    dropdown.forEach((d, i) => {
+      d.addEventListener("click", (e) => {
+        if (dropdownContent[i].style.display === "none") {
+          dropdownContent[i].style.display = "block";
+          chevrondown[i].style.transform = "rotate(180deg)";
+        } else {
+          dropdownContent[i].style.display = "none";
+          chevrondown[i].style.transform = "rotate(0)";
+        }
+      });
+    });
+
+    close.addEventListener("click", (e) => {
+      if (sidebar.style.width === "100px") {
+        s__close.forEach((s) => {
+          s.style.display = "block";
+        });
+
+        sidebar.style.width = "300px";
+        close.style.transform = "rotate(0deg)";
+
+        s__menu.style.alignItems = "start";
+      } else {
+        dropdownContent.forEach((d) => {
+          d.style.display = "none";
+        });
+
+        close.style.transform = "rotate(180deg)";
+
+        sidebar.style.width = "100px";
+        s__menu.style.alignItems = "center  ";
+
+        s__close.forEach((s) => {
+          s.style.display = "none";
+        });
+      }
+    });
+
+    const active = document.querySelectorAll(".load-content");
+    active.forEach((a) => {
+      a.addEventListener("click", (e) => {
+        active.forEach((b) => {
+          b.classList.remove("active");
+        });
+        a.classList.add("active");
+      });
+    });
+  </script>
+</html>
